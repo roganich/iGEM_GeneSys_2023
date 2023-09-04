@@ -43,12 +43,12 @@ for idx, name in enumerate(params_names):
     if idx < 4:
         axes[0,idx].plot(vecTime, simu[:,idx])
         axes[0,idx].grid()
-        axes[0,idx].ylabel(name)
+        axes[0,idx].set_ylabel(name)
     else:
         axes[1,idx-4].plot(vecTime, simu[:,idx])
         axes[1,idx-4].grid()
-        axes[1,idx-4].ylabel(name)
-        axes[1,idx-4].xlabel('Time') 
+        axes[1,idx-4].set_ylabel(name)
+        axes[1,idx-4].set_xlabel('Time') 
 
 plt.savefig(os.path.join(main_path, results_path, 'simu_ODE.jpeg'))
 plt.close()
