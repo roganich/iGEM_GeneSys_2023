@@ -18,4 +18,3 @@ def model(variables, t, params):
 
     return dXdt
 
-
