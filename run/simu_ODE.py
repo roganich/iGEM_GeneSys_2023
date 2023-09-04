@@ -28,7 +28,7 @@ df_params = pd.read_csv(os.path.join(main_path, parameters_path, 'params.csv'))
 
 params_vals = list(df_params['value'])
 
-Tmax = 150
+Tmax = 500
 nums = Tmax*5
 vecTime = np.linspace(0, Tmax, nums)
 
@@ -37,7 +37,7 @@ cond_init = [0.1]*len(params_names)
 
 simu = odeint(model, cond_init, vecTime, args=(params_vals,))
 
-fig, axes = plt.subplots(2,4, figsize=(10,10))
+fig, axes = plt.subplots(2,4, figsize=(15,10))
 
 for idx, name in enumerate(params_names):
     if idx < 4:
@@ -49,6 +49,8 @@ for idx, name in enumerate(params_names):
         axes[1,idx-4].grid()
         axes[1,idx-4].set_ylabel(name)
         axes[1,idx-4].set_xlabel('Time') 
+
+plt.tight_layout()
 
 plt.savefig(os.path.join(main_path, results_path, 'simu_ODE.jpeg'))
 plt.close()
