@@ -54,8 +54,13 @@ for idx, name in enumerate(params_names):
         axes[1,idx-4].plot(vecTime, simu[:,idx])
         axes[1,idx-4].grid()
         axes[1,idx-4].set_ylabel(name)
-        axes[1,idx-4].set_xlabel('Time') 
+        axes[1,idx-4].set_xlabel('Time')
 
+    axes[1,3].get_xaxis().set_visible(False)
+    axes[1,3].get_yaxis().set_visible(False) 
+    axes[1,3].axis('off')
+
+plt.tight_layout()
 plt.savefig(os.path.join(main_path, results_path, 'simu_ODE.jpeg'))
 plt.close()
 
