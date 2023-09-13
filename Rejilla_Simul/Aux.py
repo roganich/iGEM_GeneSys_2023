@@ -32,24 +32,24 @@ def find_path(matrix):
     moves = [(1, 0), (-1, 0), (0, 1), (0, -1), (1, 1), (-1, -1), (1, -1), (-1, 1)]
 
     # Bordes derecha e izquierda
-    for i in range(rows):
-        if matrix[i][0] == 1:
-            # Comenzar una búsqueda desde el borde izquierdo
-            queue = deque([(i, 0)])
-            visited = set([(i, 0)])
+#    for i in range(rows):
+#        if matrix[i][0] == 1:
+#            # Comenzar una búsqueda desde el borde izquierdo
+#            queue = deque([(i, 0)])
+#            visited = set([(i, 0)])
 
-            while queue:
-                x, y = queue.popleft()
+#            while queue:
+#                x, y = queue.popleft()
 
-                if y == cols - 1:
-                    return True  # Se encontró un camino hacia el borde derecho
+#                if y == cols - 1:
+#                    return True  # Se encontró un camino hacia el borde derecho
 
                 # Explorar las celdas vecinas 
-                for dx, dy in moves:
-                    nx, ny = x + dx, y + dy
-                    if is_valid(nx, ny) and (nx, ny) not in visited:
-                        queue.append((nx, ny))
-                        visited.add((nx, ny))
+#                for dx, dy in moves:
+#                    nx, ny = x + dx, y + dy
+#                    if is_valid(nx, ny) and (nx, ny) not in visited:
+#                        queue.append((nx, ny))
+#                        visited.add((nx, ny))
 
     # Bordes superior e inferior
     for j in range(cols):
