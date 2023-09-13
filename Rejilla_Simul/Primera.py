@@ -14,7 +14,6 @@ def simulacion_rejilla(concentracion_crom):
     densidad_shewanella = 10/10 #Relacionado con la densidad espacial en el fluido
     densidad_conexiones = 6/8   #Relacionado con la cantidad de tubos de conexion que tiene (completamente biologico)
     N = 100 #Dimensionalidad de rejilla
-    concentracion_crom = concentracion_crom/100
     matrix_binaria = np.random.rand(N,N) #Rejilla de simulacion
     matrix_binaria = (matrix_binaria < densidad_shewanella).astype(int)
 
@@ -32,14 +31,15 @@ def simulacion_rejilla(concentracion_crom):
     else: 
         plt.title(r"No existe camino de medición", fontsize = 24)
     plt.axis("off")
-
-# %%
 concentracion_slider = widgets.FloatSlider(
     value=0.0,
     min=0.0,
-    max=100,
-    step=0.1,
+    max=1,
+    step=0.01,
     description='Concentracion:')
+#%%
 interact(simulacion_rejilla, concentracion_crom=concentracion_slider)
+display(concentracion_slider)
+
 
 # %%
