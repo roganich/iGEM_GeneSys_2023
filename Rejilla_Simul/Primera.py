@@ -11,14 +11,30 @@ from IPython.display import display
 
 #Parametros biologicos de densidades
 def simulacion_rejilla(concentracion_crom):
-    densidad_shewanella = 10/10 #Relacionado con la densidad espacial en el fluido
+    densidad_E_Coli = 3/9
+    densidad_shewanella = 4/9
+    densidad_fluido = 1 - densidad_E_Coli-densidad_shewanella
+
     densidad_conexiones = 8/8   #Relacionado con la cantidad de tubos de conexion que tiene (completamente biologico)
-    N = 10 #Dimensionalidad de rejilla
+    N = 100 #Dimensionalidad de rejilla
     matrix_binaria = np.random.rand(N,N) #Rejilla de simulacion
-    matrix_binaria = (matrix_binaria < densidad_shewanella).astype(int)
+
+    adjusted_array = np.zeros((N, N), dtype=int)
+
+    # Aplica las reglas
+    for i in range(N):
+        for j in range(N):
+            value = matrix_binaria[i, j]
+            if value < densidad_E_Coli:
+                adjusted_array[i, j] = 2
+            elif densidad_E_Coli <= value <= densidad_E_Coli + densidad_shewanella:
+                adjusted_array[i, j] = 1
+            else:
+                adjusted_array[i, j] = 0
+
 
     capacidad_de_conectividad = densidad_conexiones*concentracion_crom
-    nueva_matriz = apply_kernel(matrix_binaria, capacidad_de_conectividad)
+    nueva_matriz = apply_kernel(adjusted_array, capacidad_de_conectividad)
 
     nueva_matriz = list(nueva_matriz)
     camino = find_path(nueva_matriz)
@@ -41,4 +57,31 @@ concentracion_slider = widgets.FloatSlider(
 
 interact(simulacion_rejilla, concentracion_crom=concentracion_slider)
 display(concentracion_slider)
+# %%
+densidad_E_Coli = 1/9
+densidad_shewanella = 6/9
+densidad_fluido = 1 - densidad_E_Coli-densidad_shewanella
+
+densidad_conexiones = 8/8   #Relacionado con la cantidad de tubos de conexion que tiene (completamente biologico)
+N = 50 #Dimensionalidad de rejilla
+matrix_binaria = np.random.rand(N,N) #Rejilla de simulacion
+
+#matrix_binaria = (matrix_binaria < densidad_shewanella).astype(int)
+
+adjusted_array = np.zeros((N, N), dtype=int)
+
+# Aplica las reglas
+for i in range(N):
+    for j in range(N):
+        value = matrix_binaria[i, j]
+        if value < densidad_E_Coli:
+            adjusted_array[i, j] = 2
+        elif densidad_E_Coli <= value <= densidad_E_Coli + densidad_shewanella:
+            adjusted_array[i, j] = 1
+        else:
+            adjusted_array[i, j] = 0
+
+plt.imshow(adjusted_array)
+# %%
+adjusted_array
 # %%
