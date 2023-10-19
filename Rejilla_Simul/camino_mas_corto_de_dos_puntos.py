@@ -117,3 +117,7 @@ for i in tqdm(range(10)):
     resistencias_calculadas.append(resistencia_equivalente)
 
 # %%
+np.mean(resistencias_calculadas)
+# %%
+np.std(resistencias_calculadas)
+# %%
