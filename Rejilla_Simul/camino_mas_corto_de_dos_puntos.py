@@ -54,7 +54,7 @@ def findShortestPaths(grid, sources, destinations):
 
     return shortest_paths
 resistencias_calculadas = []
-for i in tqdm(range(100)):
+for i in tqdm(range(10)):
     concentracion_crom = 0.7
     densidad_E_Coli = 1/9 #Densidad de concentración de E coli
     densidad_shewanella = 7/9 #Densidad de concentración de Shewanella
@@ -97,7 +97,9 @@ for i in tqdm(range(100)):
 
     sumas = []
     for camino in shortest_paths:
-        suma = sum(elemento for elemento in camino if elemento != -1)
+        camino_filtrado = [elemento for elemento in camino if elemento != -1]
+        inversos = [1/resistencia for resistencia in camino_filtrado]
+        suma = sum(inversos)
         sumas.append(suma)
 
     # Filtra los valores de resistencia que no son cero
