@@ -1,80 +1,63 @@
 #%%
 #Importe de librerias
-
 import numpy as np
 from tqdm import tqdm
 from numba import jit,njit
 import pandas as pd
 
 @njit
-def funcion_creacion_ARNmX():
-    return Kx
+def funcion_creacion_pNahR():
+    return (sigma_pNahR*sigma_rNahR)/gamma_rNahR
+
+def funcion_destruccion_pNahR(cantidad_pNahR):
+    return gamma_pNahR*cantidad_pNahR
+
+def funcion_mNahR(cantidad_pNahR, cantidad_m):
+    return (cantidad_pNahR*cantidad_m)/(K + cantidad_m)
+
+def funcion_creacion_pLuxI(cantidad_pNahR, cantidad_m)
+    return (sigma_pLuxI/gamma_rLuxI)*(alpha_LuxI + (beta_LuxI)/(1 + (funcion_mNahR(cantidad_pNahR, cantidad_m)/K_LuxI)**(-h_LuxI))) 
+
+def funcion_destruccion_pLuxI(cantidad_pLuxI):
+    return gamma_pLuxI*cantidad_pLuxI
+
+def cantidad_AHL(cantidad_pLuxI):
+    return constante_grande*cantidad_pLuxI
+
+def funcion_creacion_pLuxR():
+    return (sigma_pLuxR*sigma_rLuxR)/gamma_rLuxR
+
+def funcion_destruccion_pLuxR(cantidad_pLuxR):
+    return gamma_pLuxR*cantidad_pLuxR
+
+def funcion_LuxRAHL(cantidad_pLuxR, cantidad_pLuxI):
+    return (S*cantidad_pLuxR*cantidad_AHL(cantidad_pLuxI))/(K_LuxRAHL + cantidad_AHL(cantidad_pLuxI))
+
+def funcion_creation_pmtrc():
+    return (sigma_pmtrC/gamma_rmtrC)*(alpha_mtrC + (beta_mtrC)/(1 + (funcion_LuxRAHL(cantidad_pLuxR, cantidad_pLuxI)/K_mtrC)**(-h_mtrC))) 
+
+
+def funcion_destruccion_pmtrc(cantidad_pmtrc):
+    return gamma_pmtrC*cantidad_pmtrc
+
 
 @njit
-def funcion_creacion_ARNmY(cantidad_X):
-    return Ky*((cantidad_X**Hill)/(cantidad_X**Hill + Kxy**Hill))
+def modelo_constitutivo(cantidad_pNahR, cantidad_m,cantidad_pLuxI, cantidad_pLuxR, cantidad_pmtrc):
 
-@njit
-def funcion_creacion_ARNmZ(cantidad_X, cantidad_Y):
-    creacion_ARNmZ = Kz*((cantidad_X**Hill)/(cantidad_X**Hill + Kxz**Hill))*((cantidad_Y**Hill)/(cantidad_Y**Hill + Kyz**Hill))
-    return creacion_ARNmZ
+    propensidad_creacion_pNahR = funcion_creacion_pNahR()
+    propensidad_destruccion_pNahR =  funcion_destruccion_pNahR(cantidad_pNahR)
 
-@njit
-def funcion_creacion_X(cantidad_mX):
-    return Kpx*cantidad_mX
+    propensidad_creacion_pLuxI = funcion_creacion_pLuxI(cantidad_pNahR, cantidad_m)
+    propensidad_destruccion_pLuxI = funcion_destruccion_pLuxI(cantidad_pLuxI)
 
-@njit
-def funcion_creacion_Y(cantidad_mY):
-    return Kpy*cantidad_mY
+    propensidad_creacion_pLuxR = funcion_creacion_pLuxR()
+    propensidad_destruccion_pLuxR = funcion_destruccion_pLuxR(cantidad_pLuxR)
 
-@njit
-def funcion_creacion_Z(cantidad_mZ):
-    return Kpz*cantidad_mZ
+    propensidad_creacion_pmtrc = funcion_creation_pmtrc()
+    propensidad_destruccion_pmtrc = funcion_destruccion_pmtrc(cantidad_pmtrc)
 
-@njit
-def funcion_degradacion_ARNmX(cantidad_mX):
-    return gammamx*cantidad_mX
 
-@njit
-def funcion_degradacion_ARNmY(cantidad_mY):
-    return gammamy*cantidad_mY
-
-@njit
-def funcion_degradacion_ARNmZ(cantidad_mZ):
-    return gammamz*cantidad_mZ
-
-@njit
-def funcion_degradacion_X(cantidad_X):
-    return muX * cantidad_X 
-
-@njit
-def funcion_degradacion_Y(cantidad_Y):
-    return muY * cantidad_Y 
-
-@njit
-def funcion_degradacion_Z(cantidad_Z):
-    return muZ * cantidad_Z 
-
-@njit
-def modelo_constitutivo(cantidad_mX, cantidad_mY, cantidad_mZ, cantidad_X, cantidad_Y,cantidad_Z):
-
-    propensidad_creacion_ARNmX = funcion_creacion_ARNmX()
-    propensidad_creacion_ARNmY = funcion_creacion_ARNmY(cantidad_X)
-    propensidad_creacion_ARNmZ = funcion_creacion_ARNmZ(cantidad_X, cantidad_Y)
-
-    propensidad_creacion_proteinaX = funcion_creacion_X(cantidad_mX)
-    propensidad_creacion_proteinaY = funcion_creacion_Y(cantidad_mY)
-    propensidad_creacion_proteinaZ = funcion_creacion_Z(cantidad_mZ)
-
-    propensidad_degradacion_ARNmX = funcion_degradacion_ARNmX(cantidad_mX)
-    propensidad_degradacion_ARNmY = funcion_degradacion_ARNmY(cantidad_mY)
-    propensidad_degradacion_ARNmZ = funcion_degradacion_ARNmZ(cantidad_mZ)
-
-    propensidad_degradacion_proteinaX = funcion_degradacion_X(cantidad_X)
-    propensidad_degradacion_proteinaY = funcion_degradacion_Y(cantidad_Y)
-    propensidad_degradacion_proteinaZ = funcion_degradacion_Z(cantidad_Z)
-
-    return propensidad_creacion_ARNmX, propensidad_creacion_ARNmY, propensidad_creacion_ARNmZ, propensidad_creacion_proteinaX, propensidad_creacion_proteinaY, propensidad_creacion_proteinaZ, propensidad_degradacion_ARNmX, propensidad_degradacion_ARNmY, propensidad_degradacion_ARNmZ, propensidad_degradacion_proteinaX, propensidad_degradacion_proteinaY, propensidad_degradacion_proteinaZ
+    return propensidad_creacion_pNahR, propensidad_destruccion_pNahR, propensidad_creacion_pLuxI, propensidad_destruccion_pLuxI , propensidad_creacion_pLuxR, propensidad_destruccion_pLuxR, propensidad_creacion_pmtrc , propensidad_destruccion_pmtrc
 
 @njit('f8[:](f8[:],f8)')
 def Gillespie(trp0,tmax):
@@ -83,60 +66,45 @@ def Gillespie(trp0,tmax):
     pero si temporalmente la cantidad de veces que pueda evolucionar antes del tmax en una corrida
     """
     
-    t,ARNmX, ARNmY, ARNmZ, proteinaX, proteinaY, proteinaZ =trp0 
+    t, cantidad_pNahR, cantidad_m, cantidad_pLuxI, cantidad_pLuxR, cantidad_pmtrc =trp0 
 
     while t < tmax:
-        s_1, s_2, s_3, s_4, s_5, s_6, s_7, s_8, s_9, s_10, s_11, s_12 = modelo_constitutivo(ARNmX, ARNmY, ARNmZ, proteinaX, proteinaY, proteinaZ)
-        S_T = s_1 + s_2 + s_3 + s_4 + s_5 + s_6 + s_7 + s_8 + s_9 + s_10 + s_11 + s_12
+        s_1, s_2, s_3, s_4, s_5, s_6, s_7, s_8 = modelo_constitutivo(cantidad_pNahR, cantidad_m,cantidad_pLuxI, cantidad_pLuxR, cantidad_pmtrc):
+        S_T = s_1 + s_2 + s_3 + s_4 + s_5 + s_6 + s_7 + s_8 
 
         τ = (-1/S_T)*np.log(np.random.rand())
         x = np.random.rand()
 
         if x <= (s_1)/S_T:
-            ARNmX += 1
+            cantidad_pNahR += 1
 
         elif x<= (s_1 + s_2)/S_T:
-            ARNmY += 1
+            cantidad_pNahR -= 1
         
         elif x <= (s_1 + s_2 + s_3)/S_T :
-            ARNmZ+=1
+            cantidad_pLuxI +=1
         
         elif x <= (s_1 + s_2 + s_3 + s_4)/S_T :
-            proteinaX+=1
+            cantidad_pLuxI -=1
         
         elif x <= (s_1 + s_2 + s_3 + s_4 + s_5)/S_T :
-            proteinaY+= 1
+            cantidad_pLuxR += 1
 
         elif x <= (s_1 + s_2 + s_3 + s_4 + s_5 + s_6)/S_T :
-            proteinaZ += 1
+            cantidad_pLuxR -= 1
         
         elif x <= (s_1 + s_2 + s_3 + s_4 + s_5 + s_6 + s_7)/S_T :
-            ARNmX-= 1
+            cantidad_pmtrc += 1
         
-        elif x <= (s_1 + s_2 + s_3 + s_4 + s_5 + s_6 + s_7 + s_8)/S_T :
-            ARNmY-=1
-
-        elif x <= (s_1 + s_2 + s_3 + s_4 + s_5 + s_6 + s_7 + s_8 + s_9)/S_T :
-        
-            ARNmZ-= 1
-
-        elif x <= (s_1 + s_2 + s_3 + s_4 + s_5 + s_6 + s_7 + s_8 + s_9 + s_10)/S_T :
-
-            proteinaX-=1
-
-        elif x <= (s_1 + s_2 + s_3 + s_4 + s_5 + s_6 + s_7 + s_8 + s_9 + s_10 + s_11)/S_T :
-            proteinaY-=1
-
-        else: 
-            proteinaZ-=1
+        else:
+            cantidad_pmtrc -= 1
 
         t+=τ
-    return np.array([t,ARNmX, ARNmY, ARNmZ, proteinaX, proteinaY, proteinaZ]) 
+    return np.array([t, cantidad_pNahR, cantidad_m, cantidad_pLuxI, cantidad_pLuxR, cantidad_pmtrc]) 
 
 @njit('f8[:,:](f8[:],f8[:])')
 def Estado_celula(X0,tiempos):
 
-    
     X = np.zeros((len(tiempos),len(X0)))
     X[0] = X0
     
@@ -145,7 +113,7 @@ def Estado_celula(X0,tiempos):
     
     return X
 
-x0 = np.array([0., 0., 0., 0., 0., 0., 0.])
+x0 = np.array([0., 0., 0., 0., 0., 0.])
 
 num_cel = 1000 #número de células 
 celulas = np.array([Estado_celula(x0,np.arange(0.,700.,2.)) for i in tqdm(range(num_cel))])

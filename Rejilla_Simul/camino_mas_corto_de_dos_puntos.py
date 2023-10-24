@@ -59,7 +59,7 @@ valores_posibles_citocromo = [0.0, 0.05, 0.10, 0.15, 0.20, 0.25, 0.30, 0.35, 0.4
 
 for concentracion_individual_cromo in valores_posibles_citocromo:
     resistencias_calculadas = []
-    for hola in tqdm(range(10)):
+    for hola in tqdm(range(100)):
         concentracion_crom = concentracion_individual_cromo
         densidad_E_Coli = 1/9 #Densidad de concentración de E coli
         densidad_shewanella = 7/9 #Densidad de concentración de Shewanella
@@ -119,13 +119,14 @@ for concentracion_individual_cromo in valores_posibles_citocromo:
 
 np.array(resistencias_finales)
 
-corriente = 1/np.array(resistencias_finales)
+volateje_base = 100*(10**(-6))
+resistencia_base = 1*(10**3)
+corriente = volateje_base/(resistencia_base*np.array(resistencias_finales))
 
 plt.figure(figsize = (9,6))
 plt.title("Simulación corriente en función de concentración [C]", fontsize = 16)
 plt.xlabel("Concentración citocromo [C]", fontsize = 14)
-plt.ylabel("Corriente medida [A]", fontsize = 14)
+plt.ylabel("Corriente medida [mA]", fontsize = 14)
 plt.plot(valores_posibles_citocromo, corriente)
 plt.scatter(valores_posibles_citocromo, corriente, color = "red")
 plt.savefig("Resultado_simulacion.jpg", dpi = 1000)
-
