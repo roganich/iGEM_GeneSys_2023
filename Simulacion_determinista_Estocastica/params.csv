@@ -31,6 +31,6 @@ K_mtrC,5500.0
 h_mtrC,2.5
 gamma_pmtrC,0.01158
 V_T, 400000000
-S, 10
-E, 100
+S, 100
+E, 100000000
 sigma_AHL, 4

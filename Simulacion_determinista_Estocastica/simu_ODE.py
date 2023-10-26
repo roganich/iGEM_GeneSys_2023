@@ -36,7 +36,7 @@ def model_biosensor(variables, t, params):
     p_LuxR = S*sigma_pLuxR*sigma_rLuxR/(gamma_pLuxR*gamma_rLuxR)
     luxRAHL = (p_LuxR*AHL_sh)/((K_LuxRAHL*V_sh)+AHL_sh)
 
-    dp_mtrCdt = (sigma_pmtrC/gamma_rmtrC)*((alpha_mtrC) + (beta_mtrC)/(1+(luxRAHL/K_mtrC)**(-h_mtrC))) - gamma_mtrC*p_mtrC #ADICIONAR LA S DE NUEVO
+    dp_mtrCdt = S*(sigma_pmtrC/gamma_rmtrC)*(alpha_mtrC + (beta_mtrC)/(1+(luxRAHL/K_mtrC)**(-h_mtrC))) - gamma_mtrC*p_mtrC #ADICIONAR LA S DE NUEVO
 
     
     dXdt = [dp_LuxIdt, dp_mtrCdt]

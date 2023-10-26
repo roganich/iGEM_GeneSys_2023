@@ -23,6 +23,7 @@ v_ec = np.pi*(0.5**2)*1.5
 
 V_sh = S*v_sh
 V_ec = E*v_ec
+
 constante_grande = (S*K2*K1*sigma_AHL)/(gamma_Ec + gamma_out*K1*((V_T-E*v_ec-S*v_sh)/E*v_ec) + gamma_sh*K2*K1*S*v_sh/E*v_ec)*(v_sh/v_ec)
 
 
@@ -64,7 +65,7 @@ def funcion_LuxRAHL(cantidad_pLuxR, cantidad_pLuxI):
 
 @njit
 def funcion_creation_pmtrc(cantidad_pLuxR, cantidad_pLuxI):
-    return (sigma_pmtrC/gamma_rmtrC)*(alpha_mtrC + (50*beta_mtrC)/(1 + (funcion_LuxRAHL(cantidad_pLuxR, cantidad_pLuxI)/K_mtrC)**(-h_mtrC))) 
+    return S*(sigma_pmtrC/gamma_rmtrC)*(alpha_mtrC + (beta_mtrC)/(1 + (funcion_LuxRAHL(cantidad_pLuxR, cantidad_pLuxI)/K_mtrC)**(-h_mtrC))) 
 
 @njit
 def funcion_destruccion_pmtrc(cantidad_pmtrc):
@@ -154,9 +155,14 @@ celulas = np.array([Estado_celula(x0,np.arange(0.,700.,1.)) for i in tqdm(range(
 celulas_prom = np.mean(celulas,axis=0) #axis = 0 saca el promedio componente a componente de cada célula.
 #%%
 import matplotlib.pyplot as plt
-plt.plot(celulas_prom[:,5])
+plt.plot(celulas[:,:,0])
 # %%
 print(len(celulas_prom[:,0]))
 # %%
 constante_grande
+# %%
+celulas[:,:,0].shape
+# %%
+for i in range(0,9):
+    plt.plot(celulas[:,:,5][i])
 # %%
