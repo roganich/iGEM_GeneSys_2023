@@ -29,27 +29,20 @@ def model_biosensor(variables, t, params):
     
     p_NahR = (sigma_pNahR*sigma_rNahR)/(gamma_rNahR*gamma_pNahR)
     microNahR = (p_NahR*m/(K+m))
+    
+    dp_LuxIdt = sigma_pLuxI/gamma_rLuxI*(alpha_LuxI + beta_LuxI/(1+ (microNahR/K_LuxI)**-h_LuxI)) - gamma_pLuxI*p_LuxI
+
     AHL_sh = (S*K2*K1*sigma_AHL*p_LuxI)/(gamma_Ec + gamma_out*K1*((V_T-E*v_ec-S*v_sh)/E*v_ec) + gamma_sh*K2*K1*S*v_sh/E*v_ec)*(v_sh/v_ec)
     p_LuxR = S*sigma_pLuxR*sigma_rLuxR/(gamma_pLuxR*gamma_rLuxR)
     luxRAHL = (p_LuxR*AHL_sh)/((K_LuxRAHL*V_sh)+AHL_sh)
-    #HAY QUE REVISAR BIEN ALPHA Y BETA PORQUE POR ESO ESTA DANDO TAN POQUITO
-    dp_LuxIdt = sigma_pLuxI/gamma_rLuxI*(alpha_LuxI + beta_LuxI/(1+ (microNahR/K_LuxI)**-h_LuxI)) - gamma_pLuxI*p_LuxI
-    dp_mtrCdt = S*sigma_pmtrC/gamma_rmtrC * ((alpha_mtrC) + (beta_mtrC)/(1+(luxRAHL/K_mtrC)**(-h_mtrC))) - gamma_mtrC*p_mtrC
+
+    dp_mtrCdt = (sigma_pmtrC/gamma_rmtrC)*((alpha_mtrC) + (beta_mtrC)/(1+(luxRAHL/K_mtrC)**(-h_mtrC))) - gamma_mtrC*p_mtrC #ADICIONAR LA S DE NUEVO
 
     
     dXdt = [dp_LuxIdt, dp_mtrCdt]
 
     return dXdt
 
-main_path = os.getcwd()
-parameters_path = 'parameters'
-results_path = 'results'
-
-if os.path.exists(os.path.join(main_path,results_path)) == False:
-    os.mkdir(os.path.join(main_path, results_path))
-
-if os.path.exists(os.path.join(main_path, parameters_path)) == False:
-    os.mkdir(os.path.join(main_path, parameters_path))
 
 df_params = pd.read_csv(os.path.join('params.csv'))
 

@@ -5,7 +5,7 @@ from tqdm import tqdm
 from numba import jit,njit
 import pandas as pd
 import os
-
+#%%
 main_path = os.getcwd()
 parameters_path = 'parameters'
 results_path = 'results'
@@ -29,41 +29,48 @@ constante_grande = (S*K2*K1*sigma_AHL)/(gamma_Ec + gamma_out*K1*((V_T-E*v_ec-S*v
 def funcion_creacion_pNahR():
     return (sigma_pNahR*sigma_rNahR)/gamma_rNahR
 
+@njit
 def funcion_destruccion_pNahR(cantidad_pNahR):
     return gamma_pNahR*cantidad_pNahR
 
+@njit
 def funcion_mNahR(cantidad_pNahR, cantidad_m):
     return (cantidad_pNahR*cantidad_m)/(K + cantidad_m)
 
+@njit
 def funcion_creacion_pLuxI(cantidad_pNahR, cantidad_m):
     return (sigma_pLuxI/gamma_rLuxI)*(alpha_LuxI + (beta_LuxI)/(1 + (funcion_mNahR(cantidad_pNahR, cantidad_m)/K_LuxI)**(-h_LuxI))) 
 
+@njit
 def funcion_destruccion_pLuxI(cantidad_pLuxI):
     return gamma_pLuxI*cantidad_pLuxI
 
+@njit
 def cantidad_AHL(cantidad_pLuxI):
     return constante_grande*cantidad_pLuxI
 
+@njit
 def funcion_creacion_pLuxR():
     return S*(sigma_pLuxR*sigma_rLuxR)/gamma_rLuxR
 
+@njit
 def funcion_destruccion_pLuxR(cantidad_pLuxR):
     return gamma_pLuxR*cantidad_pLuxR
 
+@njit
 def funcion_LuxRAHL(cantidad_pLuxR, cantidad_pLuxI):
     return (cantidad_pLuxR*cantidad_AHL(cantidad_pLuxI))/(K_LuxRAHL*V_sh + cantidad_AHL(cantidad_pLuxI))
 
+@njit
 def funcion_creation_pmtrc(cantidad_pLuxR, cantidad_pLuxI):
-    return (S*sigma_pmtrC/gamma_rmtrC)*(alpha_mtrC + (50*beta_mtrC)/(1 + (funcion_LuxRAHL(cantidad_pLuxR, cantidad_pLuxI)/K_mtrC)**(-h_mtrC))) 
+    return (sigma_pmtrC/gamma_rmtrC)*(alpha_mtrC + (50*beta_mtrC)/(1 + (funcion_LuxRAHL(cantidad_pLuxR, cantidad_pLuxI)/K_mtrC)**(-h_mtrC))) 
 
-
+@njit
 def funcion_destruccion_pmtrc(cantidad_pmtrc):
     return gamma_pmtrC*cantidad_pmtrc
-#%%
-print(funcion_LuxRAHL(celulas_prom[:,4][-1], celulas_prom[:,3][-1]))
-#%%
 
-#@njit
+
+@njit
 def modelo_constitutivo(cantidad_pNahR, cantidad_m,cantidad_pLuxI, cantidad_pLuxR, cantidad_pmtrc):
 
     propensidad_creacion_pNahR = funcion_creacion_pNahR()
@@ -82,7 +89,7 @@ def modelo_constitutivo(cantidad_pNahR, cantidad_m,cantidad_pLuxI, cantidad_pLux
     return propensidad_creacion_pNahR, propensidad_destruccion_pNahR, propensidad_creacion_pLuxI, propensidad_destruccion_pLuxI , propensidad_creacion_pLuxR, propensidad_destruccion_pLuxR, propensidad_creacion_pmtrc , propensidad_destruccion_pmtrc
 
 #@njit('f8[:](f8[:],f8)')
-#@njit
+@njit
 def Gillespie(trp0,tmax):
     """
     Esta funcion se emplea solamente para hacer la evolución de un paso individual en la celula. Evoluciona no un paso temporal, 
@@ -123,10 +130,11 @@ def Gillespie(trp0,tmax):
             cantidad_pmtrc -= 1
 
         t+=τ
+
     return np.array([t, cantidad_pNahR, cantidad_m, cantidad_pLuxI, cantidad_pLuxR, cantidad_pmtrc]) 
 
 #@njit('f8[:,:](f8[:],f8[:])')
-#@njit
+@njit
 def Estado_celula(X0,tiempos):
 
     X = np.zeros((len(tiempos),len(X0)))
@@ -140,7 +148,7 @@ def Estado_celula(X0,tiempos):
 x0 = np.array([0., 0., 0., 0., 0., 0.])
 
 num_cel = 10 #número de células 
-celulas = np.array([Estado_celula(x0,np.arange(0.,700.,2.)) for i in tqdm(range(num_cel))])
+celulas = np.array([Estado_celula(x0,np.arange(0.,700.,1.)) for i in tqdm(range(num_cel))])
 
 celulas_prom = np.mean(celulas,axis=0) #axis = 0 saca el promedio componente a componente de cada célula.
 #%%
