@@ -154,7 +154,7 @@ celulas = np.array([Estado_celula(x0,np.arange(0.,700.,1.)) for i in tqdm(range(
 celulas_prom = np.mean(celulas,axis=0) #axis = 0 saca el promedio componente a componente de cada célula.
 #%%
 import matplotlib.pyplot as plt
-plt.plot(celulas_prom[:,3])
+plt.plot(celulas_prom[:,5])
 # %%
 print(len(celulas_prom[:,0]))
 # %%
