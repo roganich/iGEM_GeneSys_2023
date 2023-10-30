@@ -149,13 +149,13 @@ def Estado_celula(X0,tiempos):
 #%%
 x0 = np.array([0., 0., 0., 0., 0., 0.])
 
-num_cel = 10 #número de células 
+num_cel = 10000 #número de células 
 celulas = np.array([Estado_celula(x0,np.arange(0.,700.,1.)) for i in tqdm(range(num_cel))])
 
 celulas_prom = np.mean(celulas,axis=0) #axis = 0 saca el promedio componente a componente de cada célula.
 #%%
 import matplotlib.pyplot as plt
-plt.plot(celulas[:,:,0])
+plt.plot(1000000*celulas_prom[:,5])
 # %%
 print(len(celulas_prom[:,0]))
 # %%
@@ -163,6 +163,9 @@ constante_grande
 # %%
 celulas[:,:,0].shape
 # %%
-for i in range(0,9):
-    plt.plot(celulas[:,:,5][i])
+plt.title(r"")
+for i in range(0,num_cel):
+    plt.plot(1000000*celulas[:,:,5][i])
+plt.xlabel(r"")
+plt.ylabel(r"")
 # %%
