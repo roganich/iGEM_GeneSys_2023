@@ -20,6 +20,13 @@ def apply_kernel(matrix, densidad_tubulinas):
     
     return result
 
+class QItem:
+    def __init__(self, row, col, dist):
+        self.row = row
+        self.col = col
+        self.dist = dist
+
+        
 def find_path(matrix):
     if not matrix:
         return None
@@ -53,3 +60,40 @@ def find_path(matrix):
                         queue.append((nx, ny))
                         visited.add((nx, ny))
     return None
+
+def minDistance(grid, src, dest):
+    visited = [[False for _ in range(len(grid[0]))] for _ in range(len(grid))]
+    source = QItem(src[0], src[1], 0)
+    visited[source.row][source.col] = True
+    queue = [source]
+
+    while queue:
+        source = queue.pop(0)
+
+        if (source.row, source.col) == dest:
+            return source.dist
+
+        for dr, dc in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
+            new_row, new_col = source.row + dr, source.col + dc
+            if (
+                0 <= new_row < len(grid)
+                and 0 <= new_col < len(grid[0])
+                and grid[new_row][new_col] == 1
+                and not visited[new_row][new_col]
+            ):
+                queue.append(QItem(new_row, new_col, source.dist + 1))
+                visited[new_row][new_col] = True
+
+    return -1
+
+def findShortestPaths(grid, sources, destinations):
+    shortest_paths = []
+
+    for source in sources:
+        paths = []
+        for destination in destinations:
+            distance = minDistance(grid, source, destination)
+            paths.append(distance)
+        shortest_paths.append(paths)
+
+    return shortest_paths
