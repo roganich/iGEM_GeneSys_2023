@@ -45,10 +45,6 @@ def model_biosensor(variables, t, params):
 df_params = pd.read_csv(os.path.join('params.csv'))
 
 params_vals = list(df_params['value'])
-valores_parametros = []
-for para in params_vals: 
-    parametro = float(para)
-    params_vals.append(parametro)
 
 Tmax = 700
 nums = Tmax*5
@@ -70,6 +66,7 @@ for idx, name in enumerate(variable_names):
 
 plt.tight_layout()
 #plt.savefig('simu_ODE.jpeg')
+plt.show()
 plt.close()
 
 # %%
