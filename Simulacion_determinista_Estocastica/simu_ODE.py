@@ -68,5 +68,4 @@ plt.tight_layout()
 #plt.savefig('simu_ODE.jpeg')
 plt.show()
 plt.close()
-
 # %%
