@@ -1,13 +1,10 @@
 
 #Importar librerias y funciones auxiliares
-from Aux import apply_kernel, find_path
+from Aux import apply_kernel
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.pyplot as plt
 import numpy as np
-import ipywidgets as widgets
-from ipywidgets import interact
-from IPython.display import display
 from tqdm import tqdm
 import math
 
