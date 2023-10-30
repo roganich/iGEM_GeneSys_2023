@@ -21,8 +21,10 @@ def model_biosensor(variables, t, params):
     #los tamaños estan en micrometros (10^-6)
     v_sh = np.pi*(0.55**2)*2.5
     v_ec = np.pi*(0.5**2)*1.5 
-
+    S = int(S)
+    E = int(E)
     V_sh = S*v_sh
+    
     V_ec = E*v_ec
 
     #V_out = V_T - V_ec - V_sh
@@ -32,23 +34,21 @@ def model_biosensor(variables, t, params):
     
     dp_LuxIdt = sigma_pLuxI/gamma_rLuxI*(alpha_LuxI + beta_LuxI/(1+ (microNahR/K_LuxI)**-h_LuxI)) - gamma_pLuxI*p_LuxI
 
-    AHL_sh = (S*K2*K1*sigma_AHL*p_LuxI)/(gamma_Ec + gamma_out*K1*((V_T-E*v_ec-S*v_sh)/E*v_ec) + gamma_sh*K2*K1*S*v_sh/E*v_ec)*(v_sh/v_ec)
+    AHL_sh = (S*K1*K2*sigma_AHL*p_LuxI)/(gamma_Ec + gamma_out*K1*((V_T-E*v_ec-S*v_sh)/E*v_ec) + gamma_sh*K2*K1*S*v_sh/E*v_ec)*(v_sh/v_ec)
     p_LuxR = S*sigma_pLuxR*sigma_rLuxR/(gamma_pLuxR*gamma_rLuxR)
     luxRAHL = (p_LuxR*AHL_sh)/((K_LuxRAHL*V_sh)+AHL_sh)
 
-    dp_mtrCdt = S*(sigma_pmtrC/gamma_rmtrC)*(alpha_mtrC + (beta_mtrC)/(1+(luxRAHL/K_mtrC)**(-h_mtrC))) - gamma_mtrC*p_mtrC #ADICIONAR LA S DE NUEVO
+    dp_mtrCdt = S*(sigma_pmtrC/gamma_rmtrC)*(alpha_mtrC + (beta_mtrC)/(1+(luxRAHL/K_mtrC)**(-h_mtrC))) - gamma_mtrC*p_mtrC 
 
-    
     dXdt = [dp_LuxIdt, dp_mtrCdt]
 
     return dXdt
-
-
+#%%
 df_params = pd.read_csv(os.path.join('params.csv'))
 
 params_vals = list(df_params['value'])
 
-Tmax = 800
+Tmax = 700
 nums = Tmax*5
 vecTime = np.linspace(0, Tmax, nums)
 
@@ -67,8 +67,7 @@ for idx, name in enumerate(variable_names):
     axes[idx].set_xlabel(r'Time (min)')
 
 plt.tight_layout()
-plt.savefig('simu_ODE.jpeg')
+#plt.savefig('simu_ODE.jpeg')
 plt.close()
-
 
 # %%

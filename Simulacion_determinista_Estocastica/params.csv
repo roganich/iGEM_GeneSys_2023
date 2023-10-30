@@ -4,7 +4,7 @@ sigma_rNahR,2.0
 gamma_rNahR,1.8
 gamma_pNahR,0.04
 m, 1000
-K, 1001
+K, 1.8066×(10**(22))
 K1, 1200
 K2, 12440
 gamma_Ec, 0.5
@@ -18,7 +18,7 @@ K_LuxI,5500.0
 h_LuxI,2.5
 gamma_pLuxI,0.0167
 beta_LuxRAHL,2.5
-K_LuxRAHL,5500.0
+K_LuxRAHL, 6.022×10**((19))
 sigma_pLuxR,3.6
 sigma_rLuxR,4.44 
 gamma_rLuxR,0.347
@@ -31,6 +31,6 @@ K_mtrC,5500.0
 h_mtrC,2.5
 gamma_pmtrC,0.01158
 V_T, 400000000
-S, 100
+S, 100000000
 E, 100000000
 sigma_AHL, 4
