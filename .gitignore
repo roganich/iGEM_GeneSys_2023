@@ -1,6 +1,7 @@
 #MacOS file organizer
 .DS_Store
-run/.DS_Store
 parameters/.DS_Store
-results/.DS_Store
 Rejilla_Simul/.DS_Store
+results/.DS_Store
+run/.DS_Store
+Simulacion_determinista_Estocastica/.DS_Store
