@@ -5,7 +5,7 @@ from scipy.integrate import odeint
 import pandas as pd
 import os
 
-def model_biosensor(variables, t, params):
+def model_biosensor(variables, t, params,microplastic):
     p_LuxI, p_mtrC = variables
     sigma_pNahR, sigma_rNahR, gamma_rNahR, gamma_pNahR, m, K, K1, K2, gamma_Ec, gamma_out, gamma_sh, sigma_pLuxI, gamma_rLuxI, alpha_LuxI, beta_LuxI, K_LuxI, h_LuxI, gamma_pLuxI, beta_LuxRAHL, K_LuxRAHL, sigma_pLuxR, sigma_rLuxR, gamma_rLuxR, gamma_pLuxR, sigma_pmtrC, gamma_rmtrC, alpha_mtrC, beta_mtrC, K_mtrC, h_mtrC, gamma_mtrC, V_T, S, E, sigma_AHL = params
     
@@ -28,7 +28,8 @@ def model_biosensor(variables, t, params):
     #V_out = V_T - V_ec - V_sh
     
     p_NahR = (sigma_pNahR*sigma_rNahR)/(gamma_rNahR*gamma_pNahR)
-    microNahR = (p_NahR*m/(K+m))
+    microNahR = (p_NahR*microplastic/(K+microplastic))
+
     
     dp_LuxIdt = sigma_pLuxI/gamma_rLuxI*(alpha_LuxI + beta_LuxI/(1+ (microNahR/K_LuxI)**-h_LuxI)) - gamma_pLuxI*p_LuxI
 
@@ -53,8 +54,14 @@ vecTime = np.linspace(0, Tmax, nums)
 variable_names = ['p_LuxI', 'p_mtrC']
 cond_init = [0.1]*len(variable_names)
 
-simu = odeint(model_biosensor, cond_init, vecTime, args=(params_vals,))
+p_mtrC_valores = []
+for micro in [1,100,1000,10000,100000,1000000,10000000,100000000]:
 
+    simu = odeint(model_biosensor, cond_init, vecTime, args=(params_vals,micro))
+    
+    p_mtrC_valores.append(simu[:,1])
+
+#%%
 fig, axes = plt.subplots(1,2, figsize=(9,6))
 titulos = ["p_LuxI vs time", "p_mtrC vs time"]
 for idx, name in enumerate(variable_names):
@@ -68,4 +75,9 @@ plt.tight_layout()
 #plt.savefig('simu_ODE.jpeg')
 plt.show()
 plt.close()
+# %%
+
+plt.plot(p_mtrC_valores[7])
+# %%
+len(p_mtrC_valores)
 # %%
