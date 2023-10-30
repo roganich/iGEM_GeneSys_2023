@@ -21,8 +21,6 @@ def model_biosensor(variables, t, params):
     #los tamaños estan en micrometros (10^-6)
     v_sh = np.pi*(0.55**2)*2.5
     v_ec = np.pi*(0.5**2)*1.5 
-    S = int(S)
-    E = int(E)
     V_sh = S*v_sh
     
     V_ec = E*v_ec
@@ -47,6 +45,10 @@ def model_biosensor(variables, t, params):
 df_params = pd.read_csv(os.path.join('params.csv'))
 
 params_vals = list(df_params['value'])
+valores_parametros = []
+for para in params_vals: 
+    parametro = float(para)
+    params_vals.append(parametro)
 
 Tmax = 700
 nums = Tmax*5
