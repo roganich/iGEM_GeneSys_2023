@@ -43,7 +43,10 @@ def model_biosensor(variables, t, params,microplastic):
 
     return dXdt
 #%%
-df_params = pd.read_csv(os.path.join('params.csv'))
+cwd = os.getcwd()
+
+
+df_params = pd.read_csv(os.path.join(cwd,'Simulacion_determinista_Estocastica','params.csv'))
 
 params_vals = list(df_params['value'])
 
@@ -63,21 +66,28 @@ for micro in [1,100,1000,10000,100000,1000000,10000000,100000000]:
 
 #%%
 fig, axes = plt.subplots(1,2, figsize=(9,6))
+colors = ['darkgreen', 'darkmagenta']
 titulos = ["p_LuxI vs time", "p_mtrC vs time"]
 for idx, name in enumerate(variable_names):
     axes[idx].set_title(fr"{titulos[idx]}")
-    axes[idx].plot(vecTime, simu[:,idx])
+    axes[idx].plot(vecTime, simu[:,idx], color=colors[idx])
+    axes[idx].grid()
 
     axes[idx].set_ylabel(fr"{name}")
     axes[idx].set_xlabel(r'Time (min)')
 
 plt.tight_layout()
-#plt.savefig('simu_ODE.jpeg')
+plt.savefig('simu_ODE.jpeg', dpi=500)
 plt.show()
-plt.close()
 # %%
-
-plt.plot(p_mtrC_valores[7])
+plt.figure()
+plt.plot(p_mtrC_valores[7], color='dodgerblue')
+plt.xlabel('Microplastic concentration')
+plt.ylabel('mtrC')
+plt.grid()
+plt.title('Sensibility of the cytochrome to the microplastic concentration')
+plt.savefig('sensibility_mtrC', dpi=500)
+plt.show()
 # %%
 len(p_mtrC_valores)
 # %%
