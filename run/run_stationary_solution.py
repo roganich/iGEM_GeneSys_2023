@@ -1,4 +1,3 @@
-#%%
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -75,4 +74,3 @@ plt.axhline(y = valores_totales_p_mtrC[-1], color = "black", linestyle = "--", a
 plt.legend(fontsize = 14)
 plt.subplots_adjust(bottom=0.15)
 plt.savefig("MtrC_Protein_vs_Microplastic_Concentration.jpg", dpi = 500)
-# %%
