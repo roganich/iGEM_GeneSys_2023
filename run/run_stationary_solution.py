@@ -1,3 +1,4 @@
+#%%
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -47,7 +48,7 @@ valores_totales_p_LuxR = []
 valores_totales_luxRAHL = []
 valores_totales_p_mtrC = []
 
-valores_micro  = np.logspace(19.5,22.5, num = 1000)
+valores_micro  = np.logspace(18.2,22, num = 1000)
 
 for micro in valores_micro:
     resultados = modificacion_estado_estacionario(micro)
@@ -61,9 +62,9 @@ for micro in valores_micro:
     valores_totales_p_mtrC.append(resultados[6])
 
 plt.figure(figsize=(8,5))
-plt.title(r"P_mtrc vs [m]", fontsize = 16)
+plt.title(r"MtrC protein production vs microplastic concentration", fontsize = 16)
 plt.xlabel(r"Microplastic concentration $\frac{[m]}{m^3}$", fontsize = 16)
-plt.ylabel(r"P_mtrc", fontsize = 16)
+plt.ylabel(r"MtrC protein [molecules]", fontsize = 16)
 plt.ticklabel_format(style="sci")
 plt.plot(valores_micro[0:-1], valores_totales_p_mtrC[0:-1], label = "")
 plt.xscale("log")
@@ -72,3 +73,6 @@ plt.axvline(x = 1.8066e20, color = "green", label = r"K", linestyle = "--", alph
 plt.axvline(x = 2.8e20, color = "red", label = r"[m] critic value", linestyle = "--", alpha = 0.5)
 plt.axhline(y = valores_totales_p_mtrC[-1], color = "black", linestyle = "--", alpha = 0.5, label = r"Stationary Value")
 plt.legend(fontsize = 14)
+plt.subplots_adjust(bottom=0.15)
+plt.savefig("MtrC_Protein_vs_Microplastic_Concentration.jpg", dpi = 500)
+# %%
