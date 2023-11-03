@@ -1,4 +1,3 @@
-#%%
 #Importar librerias y funciones auxiliares
 from Aux import apply_kernel, minDistance, findShortestPaths, find_path
 import numpy as np
@@ -13,7 +12,6 @@ main_path = os.getcwd()
 parameters_path = 'parameters'
 results_path = 'results'
 
-
 if os.path.exists(os.path.join(main_path,results_path)) == False:
     os.mkdir(os.path.join(main_path, results_path))
 
@@ -26,18 +24,16 @@ if os.path.exists(os.path.join(main_path, results_path, 'GIF')) == False:
 resistencias_finales = []
 valores_posibles_citocromo = [0.0, 0.05, 0.10, 0.15, 0.20, 0.25, 0.30, 0.35, 0.40, 0.45, 0.50, 0.55, 0.60, 0.65, 0.70, 0.75, 0.8, 0.85, 0.9, 0.95, 1.0]
 
-#valores_posibles_citocromo = [0.7]
-
 for concentracion_individual_cromo in valores_posibles_citocromo:
     resistencias_calculadas = []
-    for hola in tqdm(range(1)):
+    for hola in tqdm(range(100)):
         concentracion_crom = concentracion_individual_cromo
         densidad_E_Coli = 1/9 #Densidad de concentración de E coli
         densidad_shewanella = 7/9 #Densidad de concentración de Shewanella
         densidad_fluido = 1 - densidad_E_Coli-densidad_shewanella #Densidad de puntos en los que no hay nada
 
         densidad_conexiones = 8/8   #Densidad de filamenticos relacionado con la cantidad de tubos de conexion que tiene (completamente biologico)
-        N = 40 #Dimensionalidad de rejilla relacionado con la cantidad de bichos simulados
+        N = 20 #Dimensionalidad de rejilla relacionado con la cantidad de bichos simulados
         matrix_binaria = np.random.rand(N,N) #Rejilla de simulacion con la que se determina cosas
 
         adjusted_array = np.zeros((N, N), dtype=int) #Rejilla vacia que se va a ir llenando
@@ -87,7 +83,7 @@ for concentracion_individual_cromo in valores_posibles_citocromo:
         resistencias_finales.append(resistencia_total_cromo_individual)
     else: 
         resistencias_finales.append(N*N)
-
+#%%
 np.array(resistencias_finales)
 
 volateje_base = 100*(10**(-6))
@@ -98,18 +94,20 @@ plt.figure(figsize = (9,6))
 plt.title("Simulation of current as function of the concentration [C]", fontsize = 16)
 plt.xlabel("Cytochrome concentration [C]", fontsize = 14)
 plt.ylabel("Mean current [mA]", fontsize = 14)
-plt.plot(valores_posibles_citocromo, corriente)
-plt.scatter(valores_posibles_citocromo, corriente, color = "red")
+plt.plot(valores_posibles_citocromo, corriente, linestyle = "--", label = "")
+plt.scatter(valores_posibles_citocromo, corriente, color = "red", label = "Simulation data", marker= "o", alpha= 0.7)
+plt.legend(fontsize = 14)
 plt.savefig(os.path.join(main_path, results_path, 'plot_current_microplastic.jpg'), dpi = 1000)
-
+#%%
 
 
 plt.figure(figsize=(20,20))
 plt.imshow((-1)*np.array(nueva_matriz), cmap = "viridis")
 plt.axis("off")
-plt.savefig(os.path.join(main_path, results_path, "simulation_grid.jpg"), dpi = 1000)
 
+#plt.savefig(os.path.join(main_path, results_path, "simulation_grid.jpg"), dpi = 1000)
 
+#%%
 def funcion(concentracion, posicion):
     concentracion_crom = concentracion
     densidad_E_Coli = 1/9 #Densidad de concentración de E coli
